@@ -3,7 +3,9 @@
     "features": [
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 1
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -14,7 +16,10 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 2
+        },
+
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -25,7 +30,10 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 3
+        },
+
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -36,7 +44,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 4
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -47,7 +57,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 5
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -58,7 +70,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 6
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -69,7 +83,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 7
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -80,7 +96,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 8
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -91,7 +109,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 9
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -102,7 +122,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 10
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -113,7 +135,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 11
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [
@@ -124,7 +148,9 @@
       },
       {
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          "station": 12
+        },
         "geometry": {
           "type": "Point",
           "coordinates": [

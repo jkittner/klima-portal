@@ -11,10 +11,24 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""
   ></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% block style %}
+<style>
+  .info-box {
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+</style>
 {% endblock %}
 {% block body %}
 <div class="container">
-  <div id="map" style="width: 80%; height: 800px; margin-left: auto; margin-right: auto;"></div>
+  <div id="map_row" class="row">
+    <div class="col">
+      <h2>Untersuchungsgebiet: Mülheim an der Ruhr</h2>
+      <div id="map" style="height: 800px;"></div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 {% block script %}
@@ -23,9 +37,9 @@
     var point_data = {{ geojson | safe }};
     var map = L.map("map").setView([51.42730, 6.89718], 15);
 
-    function addPopup (feature, layer) {
-      layer.bindPopup('<h1>hello</h1>')
-    }
+    // function addPopup (feature, layer) {
+    //   layer.bindPopup('<h1>hello</h1>')
+    // }
 
     L.tileLayer(
       "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
@@ -39,10 +53,74 @@
         zoomOffset: -1,
       }
     ).addTo(map);
-    var points_layer = L.geoJSON(point_data).addTo(map);
-    points_layer.eachLayer(function (layer) {
-      layer.bindPopup("<script>" + "alert('hello!')" + "<\/script>");
-    });
-    // points_layer.addData(point_data);
+    var points_layer = L.geoJSON(point_data).addTo(map).on('click', wrap);
+
+    function wrap(e) {
+      doSomething(e);
+      console.log(e)
+      createPlot(e.layer.feature.properties.station);
+    }
+
+
+    function doSomething(e) {
+      let map = document.getElementById("map_row");
+      let info_html = `
+      <div class="info-box text-center">
+        <div class="m-2">
+          <button type="button" class="btn btn-light" onclick="removeInfoPane();">X</button>
+        </div>
+          <h1>Station Nr. ${e.layer.feature.properties.station}</h2>
+            <h4>Lufttemperatur 2 m [°C]</h4>
+            <div class="m-2" id="temperature"></div>
+            <h4>Relative Feuchte [%]</h4>
+            <div class="m-2" id="humidity"></div>
+      </div>
+        `
+      if (document.getElementById("info_pane") == null) {
+        let info = document.createElement("div")
+        info.className = "col-lg-5"
+        info.id = "info_pane"
+        info.innerHTML = info_html
+        map.appendChild(info);
+      } else {
+        let info = document.getElementById("info_pane")
+        info.innerHTML = info_html;
+      }
+    }
+    async function createPlot(station) {
+      let data = await getData(station);
+      let config = { responsive: true };
+      let layout = {
+        xaxis: {
+          title: "Datum",
+          tickformat: "%Y~%m~%d %H:%M"
+        },
+        yaxis: {
+          title: "Lufttemperatur 2 m"
+        },
+        height: 300,
+        margin: {
+          l: 40,
+          r: 40,
+          b: 60,
+          t: 40,
+          pad: 4,
+        },
+      }
+      Plotly.newPlot('temperature', [data], layout, config);
+      Plotly.newPlot('humidity', [data], layout, config);
+    }
+
+    async function getData(station) {
+      let request = "/api/data?station=" + station;
+      const response = await fetch(request);
+      let data = await response.json();
+      return data;
+    }
+
+    function removeInfoPane() {
+      let to_remove = document.getElementById("info_pane");
+      to_remove.parentNode.removeChild(to_remove);
+    }
   </script>
 {% endblock %}
