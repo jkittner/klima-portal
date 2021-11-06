@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import render_template
 
+
 views = Blueprint(name='views', import_name=__name__)
 
 
@@ -13,4 +14,12 @@ def index():
         'index.html',
         title='Mülheim Daten Portal',
         geojson=geojson,
+    )
+
+
+@views.route('/compare')
+def compare_data():
+    return render_template(
+        'compare.html',
+        title='Stationsvergleich',
     )

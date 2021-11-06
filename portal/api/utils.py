@@ -15,3 +15,28 @@ def connect(db_path: str) -> Generator[sqlite3.Connection, None, None]:
     ) as db:
         with db:
             yield db
+
+
+def get_wind_direction(strength_class: int | float, station: int) -> list[int]:
+    print(strength_class)
+    with connect('app.db') as db:
+        ret = db.execute(
+            '''\
+            SELECT
+                windrichtung, (count(windrichtung) * 100 / 12)
+            FROM measurements
+            WHERE
+                station = ?
+                AND windrichtung IS NOT NULL
+                AND windgeschw_200 < ?
+            GROUP BY windrichtung;
+            ''',
+            (station, strength_class),
+        ).fetchall()
+    print(ret)
+    wind_dirs = ('N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW')
+    wind_dict = {k: 0 for k in wind_dirs}
+    for r in ret:
+        wind_dict[r[0]] = r[1]
+
+    return list(wind_dict.values())

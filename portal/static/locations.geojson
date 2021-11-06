@@ -4,7 +4,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 1
+          "station": 1,
+          "name": "Schloßbrücke"
         },
         "geometry": {
           "type": "Point",
@@ -17,7 +18,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 2
+          "station": 2,
+          "name": "Berliner Platz"
         },
 
         "geometry": {
@@ -31,7 +33,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 3
+          "station": 3,
+          "name": "Leineweber Straße"
         },
 
         "geometry": {
@@ -45,7 +48,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 4
+          "station": 4,
+          "name": "Forumsgebäude"
         },
         "geometry": {
           "type": "Point",
@@ -58,7 +62,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 5
+          "station": 5,
+          "name": "Forumsgebäude Brücke"
         },
         "geometry": {
           "type": "Point",
@@ -71,7 +76,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 6
+          "station": 6,
+          "name": "Dickswall"
         },
         "geometry": {
           "type": "Point",
@@ -84,7 +90,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 7
+          "station": 7,
+          "name": "Buggenbeck"
         },
         "geometry": {
           "type": "Point",
@@ -97,7 +104,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 8
+          "station": 8,
+          "name": "Essener Straße"
         },
         "geometry": {
           "type": "Point",
@@ -110,7 +118,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 9
+          "station": 9,
+          "name": "Hölterstraße"
         },
         "geometry": {
           "type": "Point",
@@ -123,7 +132,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 10
+          "station": 10,
+          "name": "Walkmühlenstraße"
         },
         "geometry": {
           "type": "Point",
@@ -136,7 +146,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 11
+          "station": 11,
+          "name": "Rumbachtal Kreuzung"
         },
         "geometry": {
           "type": "Point",
@@ -149,7 +160,8 @@
       {
         "type": "Feature",
         "properties": {
-          "station": 12
+          "station": 12,
+          "name": "Rumbachtal"
         },
         "geometry": {
           "type": "Point",
