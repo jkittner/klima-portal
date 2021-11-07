@@ -1,29 +1,34 @@
 {% extends "base.html" %}
 {% set active_page = "/compare" %}
 {% block head %}
-<!-- Load plotly.js into the DOM -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<style>
-  body {
-    color: #003560;
-  }
-  select,
-  input {
-    margin-right: 1rem;
-  }
-  label {
-    margin-top: 1rem;
-  }
-</style>
+  <style>
+    select,
+    input {
+      margin-right: 1rem;
+    }
+    label {
+      margin-top: 1rem;
+      margin-left: 1rem;
+      margin-right: 0.25rem;
+    }
+  </style>
 {% endblock %}
 {% block body %}
 <div class="container text-center">
-  <h1>Plot Erstellen</h1>
+  <h2 class="mt-4">Plot Erstellen</h2>
+  <p style="text-align: justify;">
+    Selbst einen Plot Erstellen &mdash; über den <strong>+</strong> Button
+    können dem Plot weitere Linien hinzugefügt werden. Die Option
+    <strong>Y-Achse</strong> ermöglicht es, ein oder mehrere Parameter auf eine
+    zweite Y-Achse zu legen und so den Vergleich unterschiedlicher Parameter
+    zu vereinfachen. Hinzugefügte Parameter können mit dem roten
+    <strong>X</strong> button wieder entfernt werden.
+  </p>
   <div id="input_data" class="row">
     <div id="selectors" class="col text-left">
       <div id="selector_1" class="selector">
         <label for="station">Station:</label>
-        <select id="station" class="station" onchange="getData()">
+        <select id="station" class="station" onchange="updatePlot()">
           <option value="1">Station 1 - Schloßbrücke</option>
           <option value="2">Station 2 - Berliner Platz</option>
           <option value="3">Station 3 - Leineweber Straße</option>
@@ -38,7 +43,7 @@
           <option value="12">Station 12 - Rumbachtal</option>
         </select>
         <label for="param">Parameter:</label>
-        <select id="param" class="param" onchange="getData()">
+        <select id="param" class="param" onchange="updatePlot()">
           <option value="lufttemp_200">Lufttemperatur 2 m</option>
           <option value="lufttemp_5">Lufttemperatur 0,05 m</option>
           <option value="relhum">rel. Feuchte 0,05 m</option>
@@ -50,7 +55,7 @@
           <option value="windgeschw_200">Windgeschwindigkeit 2 m</option>
         </select>
         <label for="plot_axis_0">Y-Achse:</label>
-        <select id="plot_axis_0" onchange="getData()">
+        <select id="plot_axis_0" onchange="updatePlot()">
           <option value="y1">links</option>
           <option value="y2">rechts</option>
         </select>
@@ -59,7 +64,7 @@
           class="btn btn-danger btn-sm"
           style="visibility: hidden"
         >
-          X
+          &#10006;
         </button>
       </div>
     </div>
@@ -75,59 +80,10 @@
       </button>
     </div>
   </div>
-  <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+  <div id="myDiv"></div>
 </div>
 <script>
-  function removeField(id) {
-    let to_remove = document.getElementById(id);
-    to_remove.parentNode.removeChild(to_remove);
-    getData();
-  }
-
-  function addField() {
-    let selector = document.getElementById("selectors");
-    let additional_selector = document.createElement("div");
-    let index = document.getElementsByClassName("selector").length;
-    let id = `selector_${index + 1}`;
-    additional_selector.innerHTML = `
-      <div id="${id}" class="selector">
-        <label for="station">Station:</label>
-        <select id="station" class="station" onchange="getData()">
-            <option value="1">Station 1 - Schloßbrücke</option>
-            <option value="2">Station 2 - Berliner Platz</option>
-            <option value="3">Station 3 - Leineweber Straße</option>
-            <option value="4">Station 4 - Forumsgebäude</option>
-            <option value="5">Station 5- Forumsgebäude Brücke</option>
-            <option value="6">Station 6 - Dickswall</option>
-            <option value="7">Station 7 - Buggenbeck</option>
-            <option value="8">Station 8 - Essener Straße</option>
-            <option value="9">Station 9 - Hölterstraße</option>
-            <option value="10">Station 10 - Walkmühlenstraße</option>
-            <option value="11">Station 11 - Rumbachtal Kreuzung</option>
-            <option value="12">Station 12 - Rumbachtal</option>
-          </select>
-        <label for="param">Parameter:</label>
-          <select id="param" class="param" onchange="getData()">
-            <option value="lufttemp_200">Lufttemperatur 2 m</option>
-            <option value="lufttemp_5">Lufttemperatur 0,05 m</option>
-            <option value="relhum">rel. Feuchte 0,05 m</option>
-            <option value="oberfl_temp_unten">Oberfl. Temperatur unten</option>
-            <option value="oberfl_temp_oben">Oberfl. Temperatur oben</option>
-            <option value="oberfl_temp_links">Oberfl. Temperatur Nord</option>
-            <option value="oberfl_temp_rechts">Oberfl. Temperatur Süd</option>
-            <option value="windgeschw_5">Windgeschwindigkeit 0,05 m</option>
-            <option value="windgeschw_200">Windgeschwindigkeit 2 m</option>
-          </select>
-        <label for="plot_axis_0">Y-Achse:</label>
-        <select id="plot_axis_${index}" onchange="getData()">
-          <option value="y1">links</option>
-          <option value="y2" selected="selected">rechts</option>
-        </select>
-        <button type="button" class="btn btn-danger btn-sm" onclick="removeField('${id}');">X</button>
-      </div>`;
-    selector.appendChild(additional_selector);
-  }
-  async function getData() {
+  async function updatePlot() {
     let param = document.getElementById("param").value;
     let params = document.getElementsByClassName("param");
     let stations = document.getElementsByClassName("station");
@@ -146,7 +102,7 @@
       data[i].yaxis = document.getElementById(`plot_axis_${i}`).value;
     }
 
-    var layout = {
+    let layout = {
       xaxis: {
         title: "Datum",
       },
@@ -159,7 +115,7 @@
         overlaying: "y",
         gridcolor: "#e0d1d1",
       },
-      height: 700,
+      height: 650,
       margin: {
         l: 40,
         r: 40,
@@ -174,12 +130,12 @@
         xanchor: "center",
       },
     };
-    var config = { responsive: true };
+    let config = { responsive: true };
     Plotly.newPlot("myDiv", data, layout, config);
   }
-
+  // as a default plot the air temperature of station 1
   document.getElementById("param").value = "lufttemp_200";
   document.getElementById("station").value = "1";
-  window.onload = getData();
+  window.onload = updatePlot();
 </script>
 {% endblock %}
