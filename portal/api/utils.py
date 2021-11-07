@@ -18,7 +18,6 @@ def connect(db_path: str) -> Generator[sqlite3.Connection, None, None]:
 
 
 def get_wind_direction(strength_class: int | float, station: int) -> list[int]:
-    print(strength_class)
     with connect('app.db') as db:
         ret = db.execute(
             '''\
@@ -33,7 +32,6 @@ def get_wind_direction(strength_class: int | float, station: int) -> list[int]:
             ''',
             (station, strength_class),
         ).fetchall()
-    print(ret)
     wind_dirs = ('N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW')
     wind_dict = {k: 0 for k in wind_dirs}
     for r in ret:

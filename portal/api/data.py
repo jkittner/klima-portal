@@ -62,8 +62,6 @@ def wind_data() -> Response:
     class_075 = get_wind_direction(0.75, request.args['station'])
     class_10 = get_wind_direction(1, request.args['station'])
     class_above = get_wind_direction(200, request.args['station'])
-    print(class_025)
-    print(class_05)
     return jsonify(
         [
             {
