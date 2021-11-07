@@ -17,8 +17,12 @@ def connect(db_path: str) -> Generator[sqlite3.Connection, None, None]:
             yield db
 
 
-def get_wind_direction(strength_class: int | float, station: int) -> list[int]:
-    with connect('app.db') as db:
+def get_wind_direction(
+        strength_class: int | float,
+        station: int,
+        db_path: str,
+) -> list[int]:
+    with connect(db_path) as db:
         ret = db.execute(
             '''\
             SELECT

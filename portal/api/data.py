@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import current_app
 from flask import jsonify
 from flask import request
 from flask import Response
@@ -33,7 +34,7 @@ def data() -> Response:
         ret.status_code = 400
         return ret
 
-    with connect('app.db') as db:
+    with connect(current_app.config['DB_PATH']) as db:
         ret = db.execute(
             '''\
             SELECT datum as "[timestamp]", lufttemp_5, lufttemp_200, relhum,
@@ -57,11 +58,21 @@ def data() -> Response:
 
 @api.route('/data/wind')
 def wind_data() -> Response:
-    class_025 = get_wind_direction(0.25, request.args['station'])
-    class_05 = get_wind_direction(0.5, request.args['station'])
-    class_075 = get_wind_direction(0.75, request.args['station'])
-    class_10 = get_wind_direction(1, request.args['station'])
-    class_above = get_wind_direction(200, request.args['station'])
+    class_025 = get_wind_direction(
+        0.25, request.args['station'], current_app.config['DB_PATH'],
+    )
+    class_05 = get_wind_direction(
+        0.5, request.args['station'], current_app.config['DB_PATH'],
+    )
+    class_075 = get_wind_direction(
+        0.75, request.args['station'], current_app.config['DB_PATH'],
+    )
+    class_10 = get_wind_direction(
+        1, request.args['station'], current_app.config['DB_PATH'],
+    )
+    class_above = get_wind_direction(
+        200, request.args['station'], current_app.config['DB_PATH'],
+    )
     return jsonify(
         [
             {

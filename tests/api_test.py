@@ -35,7 +35,7 @@ def test_database_can_query():
     ),
 )
 def test_get_wind_direction(strength, station, exp):
-    wind = get_wind_direction(strength, station=station)
+    wind = get_wind_direction(strength, station=station, db_path='app.db')
     assert wind == exp
 
 
