@@ -125,8 +125,8 @@ async function getData(station, param) {
  */
 async function getWindData(station) {
   let request = "/api/data/wind?station=" + station;
-  const response = await fetch(request);
-  let data = await response.json();
+  const response = fetch(request);
+  let data = response.json();
   return data;
 }
 
@@ -136,16 +136,16 @@ async function getWindData(station) {
  * @param {integer} station - the station number
  */
 async function createPlot(station) {
-  let temp_200 = await getData(station, "lufttemp_5");
-  let temp_5 = await getData(station, "lufttemp_200");
-  let relhum = await getData(station, "relhum");
-  let surf_temp_top = await getData(station, "oberfl_temp_unten");
-  let surf_temp_bot = await getData(station, "oberfl_temp_oben");
-  let surf_temp_left = await getData(station, "oberfl_temp_links");
-  let surf_temp_right = await getData(station, "oberfl_temp_rechts");
-  let wind_speed_200 = await getData(station, "windgeschw_200");
-  let wind_speed_5 = await getData(station, "windgeschw_5");
-  let wind_dir = await getWindData(station);
+  let temp_200 = getData(station, "lufttemp_5");
+  let temp_5 = getData(station, "lufttemp_200");
+  let relhum = getData(station, "relhum");
+  let surf_temp_top = getData(station, "oberfl_temp_unten");
+  let surf_temp_bot = getData(station, "oberfl_temp_oben");
+  let surf_temp_left = getData(station, "oberfl_temp_links");
+  let surf_temp_right = getData(station, "oberfl_temp_rechts");
+  let wind_speed_200 = getData(station, "windgeschw_200");
+  let wind_speed_5 = getData(station, "windgeschw_5");
+  let wind_dir = getWindData(station);
   let config = { responsive: true };
   let layout = {
     xaxis: {
@@ -174,16 +174,16 @@ async function createPlot(station) {
   };
   let layout_temp = layout;
   layout_temp.yaxis.title = temp_200.unit;
-  Plotly.newPlot("temperature", [temp_200, temp_5], layout_temp, config);
+  Plotly.newPlot("temperature", [await temp_200, await temp_5], layout_temp, config);
   let layout_relhum = layout;
   layout_temp.yaxis.title = relhum.unit;
-  Plotly.newPlot("relhum", [relhum], layout_relhum, config);
+  Plotly.newPlot("relhum", [await relhum], layout_relhum, config);
   let layout_surf_temp = layout;
   layout_surf_temp.yaxis.title = surf_temp_top.unit;
   layout_surf_temp.height = 300;
   Plotly.newPlot(
     "surf_temp",
-    [surf_temp_top, surf_temp_bot, surf_temp_left, surf_temp_right],
+    [await surf_temp_top, await surf_temp_bot, await surf_temp_left, await surf_temp_right],
     layout_surf_temp,
     config
   );
@@ -191,7 +191,7 @@ async function createPlot(station) {
   layout_wind_speed.yaxis.title = wind_speed_200.unit;
   Plotly.newPlot(
     "wind_speed",
-    [wind_speed_200, wind_speed_5],
+    [await wind_speed_200, await wind_speed_5],
     layout_wind_speed,
     config
   );
@@ -216,5 +216,5 @@ async function createPlot(station) {
       angularaxis: { direction: "clockwise" },
     },
   };
-  Plotly.newPlot("wind_dir", wind_dir, layout_wind_dir);
+  Plotly.newPlot("wind_dir", await wind_dir, layout_wind_dir);
 }
