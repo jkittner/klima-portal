@@ -111,8 +111,9 @@ function removeInfoPane() {
  */
 async function getData(station, param) {
   let request = "/api/data?station=" + station + "&param=" + param;
-  const response = await fetch(request);
-  let data = await response.json();
+  let data = fetch(request).then((response) => {
+    return response.json()
+  })
   return data;
 }
 
@@ -125,8 +126,9 @@ async function getData(station, param) {
  */
 async function getWindData(station) {
   let request = "/api/data/wind?station=" + station;
-  const response = fetch(request);
-  let data = response.json();
+  let data = fetch(request).then((response) => {
+    return response.json()
+  })
   return data;
 }
 
