@@ -53,7 +53,7 @@ function addField() {
 function removeField(id) {
   let to_remove = document.getElementById(id);
   to_remove.parentNode.removeChild(to_remove);
-  getData();
+  updatePlot();
 }
 
 /**
