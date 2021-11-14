@@ -27,6 +27,14 @@ def compare_data() -> str:
     )
 
 
+@views.route('/results')
+def results() -> str:
+    return render_template(
+        'results.html',
+        title='Untersuchungsergebnisse',
+    )
+
+
 @views.route('/favicon.ico')
 def favicon() -> Response:
     return send_from_directory(

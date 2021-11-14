@@ -7,7 +7,7 @@ def test_index(client):
     # navbar highlight is correct
     assert '<a class="nav-link active" href="/">Home - Overview</a>' in data
     # footer is included
-    assert '<div class="footer py-2 mt-4" ' in data
+    assert '<div class="footer pt-2 mt-4" ' in data
     assert 'GitHub' in data
     assert 'Geographisches Institut RUB' in data
 
@@ -22,7 +22,22 @@ def test_compare(client):
         '<a class="nav-link active" href="/compare">Stationsvergleich</a>'
     ) in data
     # footer is included
-    assert '<div class="footer py-2 mt-4" ' in data
+    assert '<div class="footer pt-2 mt-4" ' in data
+    assert 'GitHub' in data
+    assert 'Geographisches Institut RUB' in data
+
+
+def test_results(client):
+    resp = client.get('/results')
+    data = resp.data.decode()
+    assert resp.status_code == 200
+    assert '<nav class="navbar' in data
+    # navbar highlight is correct
+    assert (
+        '<a class="nav-link active" href="/results">Untersuchungsergebnisse</a>'  # noqa E501
+    ) in data
+    # footer is included
+    assert '<div class="footer pt-2 mt-4" ' in data
     assert 'GitHub' in data
     assert 'Geographisches Institut RUB' in data
 
